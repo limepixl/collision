@@ -10,7 +10,9 @@ struct Circle
 	sf::Vector3i color;
 
 	Circle() = default;
-	Circle(float r, const sf::Vector2f& c);
+	Circle(float r, const sf::Vector2f& c, const sf::Vector2f& v = sf::Vector2f(0.0f, 0.0f));
+
+	bool IsMoving();
 };
 
 bool CheckOverlap(Circle& first, Circle& second);

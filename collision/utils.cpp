@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include <random>
 
 float Dot(const sf::Vector2f& first, const sf::Vector2f& second)
 {
@@ -10,7 +11,16 @@ float Length(const sf::Vector2f& vec)
 	return sqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
-sf::Vector2f ClosestPointOnLine(sf::Vector2f& startOfLine, sf::Vector2f& endOfLine, sf::Vector2f& otherPoint)
+float RandomNumber(float min, float max)
+{
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::uniform_real_distribution<float> distribution(min, max);
+
+	return distribution(generator);
+}
+
+sf::Vector2f ClosestPointOnLine(const sf::Vector2f& startOfLine, const sf::Vector2f& endOfLine, const sf::Vector2f& otherPoint)
 {
 	// l: y - y1 = k1(x - x1)
 	float k1 = (endOfLine.y - startOfLine.x) / (endOfLine.x - startOfLine.x);
