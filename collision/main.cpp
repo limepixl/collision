@@ -1,7 +1,6 @@
 #include <vector>
-#include "polygon.hpp"
 #include "circle.hpp"
-#include <iostream>
+#include "utils.hpp"
 
 int main()
 {
@@ -15,11 +14,7 @@ int main()
 	sf::Clock deltaClock;	// Used for delta time
 
 	// Vector that stores all created shapes
-	std::vector<Circle> circles
-	{
-		Circle(50.0f, sf::Vector2f(WIDTH / 4.0f, HEIGHT / 2.0f)),
-		Circle(100.0f, sf::Vector2f(WIDTH * 3.0f / 4.0f, HEIGHT / 3.0f))
-	};
+	std::vector<Circle> circles;
 
 	while(window.isOpen())
 	{
@@ -32,6 +27,11 @@ int main()
 		{
 			if(event.type == sf::Event::Closed)
 				window.close();
+			if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
+			{
+				sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+				circles.emplace_back(float(rand() % 30 + 30), mousePos);
+			}
 		}
 
 		if(circles.size() > 0)
@@ -43,7 +43,16 @@ int main()
 				Circle& c1 = circles[i];
 				Circle& c2 = circles[j];
 
+				if(CheckOverlap(c1, c2))
+				{
+					sf::Vector2f delta = c1.center - c2.center;
+					delta += sf::Vector2f(1.0f, 1.0f);
+					delta /= Length(delta);
 
+					sf::Vector2f midPoint = (c1.center + c2.center) / 2.0f;
+					c1.center = midPoint + c1.radius * delta;
+					c2.center = midPoint - c2.radius * delta;
+				}
 			}
 		}
 
